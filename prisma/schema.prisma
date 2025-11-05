@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  createdAt  DateTime  @default(now())
+  files      File[]
+  passions   Passion[]
+}
+
+model Passion {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  categoryId  Int?
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  visits      Visit[]
+  rendezvous  Rendezvous[]
+  createdAt   DateTime    @default(now())
+}
+
+model File {
+  id         Int       @id @default(autoincrement())
+  name       String
+  path       String
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  size       Int?
+  type       String?
+  createdAt  DateTime  @default(now())
+  modifiedAt DateTime  @default(now())
+}
+
+model Visit {
+  id           Int       @id @default(autoincrement())
+  passionId    Int
+  passion      Passion   @relation(fields: [passionId], references: [id])
+  date         DateTime
+  duration     Int?
+  notes        String?
+  rendezvousId Int?
+  createdAt    DateTime  @default(now())
+}
+
+model Rendezvous {
+  id                Int       @id @default(autoincrement())
+  passionId         Int
+  passion           Passion   @relation(fields: [passionId], references: [id])
+  date              DateTime
+  time              DateTime
+  duration          Int?
+  location          String?
+  notes             String?
+  status            String    @default("pending")
+  notificationState String    @default("pending")
+  createdAt         DateTime  @default(now())
+}

@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-gray-800;
+}
+
+.container {
+  @apply max-w-6xl mx-auto px-4;
+}
